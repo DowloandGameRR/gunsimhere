@@ -373,10 +373,6 @@ $('go').onclick = () => {
   
   $('lobby').style.display = 'none';
   
-  // Canvas'a klavye ve odaklanma izni ver
-  cv.tabIndex = 1;
-  cv.focus();
-
   // Oyunu başlat ve doğ
   spawn();
   started = 1;
@@ -384,11 +380,16 @@ $('go').onclick = () => {
   if (online) join();
   else bots(4);
 
-  // Doğrudan tıklama anında kitleme isteği gönder
-  try {
+  // Tarayıcı engelini aşmak için canvas üzerine tıklandığında kilitleme yapmasını garantileyen dinleyici ekle
+  cv.onclick = () => {
+    if (started && $('con').style.display != 'flex' && stg.style.display != 'flex') {
+      cv.requestPointerLock();
+    }
+  };
+
+  // İlk tetikleme denemesi
+  setTimeout(() => {
     cv.requestPointerLock();
-  } catch (e) {
-    console.log(e);
-  }
+  }, 50);
 };
 </script></body></html>
