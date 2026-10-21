@@ -414,26 +414,27 @@ $('go').onclick = () => {
   name = ($('nm').value.trim() || 'Oyuncu' + Math.floor(Math.random() * 99)).replace(/[<>&]/g, '');
   room = ($('rm').value.replace(/\D/g, '').slice(0, 6) || String(1000 + Math.random() * 9000 | 0));
   
+  // Lobiyi gizle
   $('lobby').style.display = 'none';
   
-  // Oyunu başlat ve doğ
+  // Oyunu başlat ve doğur
   spawn();
   started = 1;
 
   if (online) join();
   else bots(4);
 
-  // Farenin ekrana kilitlenmesi için canvas'a odaklan ve kilit isteği gönder
-  setTimeout(() => {
-    cv.focus();
-    cv.requestPointerLock();
-  }, 100);
-};
+  // Tarayıcı kısıtlamasını aşmak için ekrana tıklandığında imleci kilitleyen global dinleyici
+  const lockCanvas = () => {
+    if (started && $('con').style.display != 'flex' && stg.style.display != 'flex') {
+      cv.requestPointerLock();
+    }
+  };
 
-// Ekstra güvenlik: Eğer ilk kilitlenme başarısız olursa, oyun ekranının herhangi bir yerine tıklandığında kilitlensin
-cv.addEventListener('click', () => {
-  if (started && $('con').style.display != 'flex' && stg.style.display != 'flex') {
-    cv.requestPointerLock();
-  }
-});
+  // Sayfada herhangi bir yere ilk tıklamada imleci kilitler
+  document.body.addEventListener('click', lockCanvas, { once: true });
+  
+  // Otomatik kilit denemesi
+  setTimeout(lockCanvas, 100);
+};
 </script></body></html>
