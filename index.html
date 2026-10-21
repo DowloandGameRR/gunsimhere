@@ -366,10 +366,29 @@ $('rm').oninput=e=>{e.target.value=e.target.value.replace(/\D/g,'')};
 ap();applyQ();if(S.fps)tg('fps',1);
 
 // ---- Başlat ----
-$('go').onclick=()=>{
- name=($('nm').value.trim()||'Oyuncu'+Math.floor(Math.random()*99)).replace(/[<>&]/g,'');
- room=($('rm').value.replace(/\D/g,'').slice(0,6)||String(1000+Math.random()*9000|0));
- $('lobby').style.display='none';cv.requestPointerLock();spawn();started=1;
- if(online)join();else bots(4);
+// ---- Başlat ----
+$('go').onclick = () => {
+  name = ($('nm').value.trim() || 'Oyuncu' + Math.floor(Math.random() * 99)).replace(/[<>&]/g, '');
+  room = ($('rm').value.replace(/\D/g, '').slice(0, 6) || String(1000 + Math.random() * 9000 | 0));
+  
+  $('lobby').style.display = 'none';
+  
+  // Canvas'a klavye ve odaklanma izni ver
+  cv.tabIndex = 1;
+  cv.focus();
+
+  // Oyunu başlat ve doğ
+  spawn();
+  started = 1;
+
+  if (online) join();
+  else bots(4);
+
+  // Doğrudan tıklama anında kitleme isteği gönder
+  try {
+    cv.requestPointerLock();
+  } catch (e) {
+    console.log(e);
+  }
 };
 </script></body></html>
