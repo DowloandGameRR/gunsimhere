@@ -308,9 +308,8 @@ addEventListener('blur',()=>{for(const k in keys)keys[k]=0;down=0});
 $('go').onclick=()=>{
  name=($('nm').value.trim()||'Oyuncu'+Math.floor(Math.random()*99)).replace(/[<>&]/g,'');
  
- // Boş bırakılırsa herkesin ortak bağlanacağı varsayılan bir oda ("1") oluşturur, 
- // girildiyse girilen kodu doğrudan oda adı yapar.
- room = $('rm').value.trim() || '1';
+ // Oda kodunu tamamen sabitlemek için buraya ortak bir isim yazabilirsiniz (Örn: "SAVAŞ1")
+ room = $('rm').value.trim() || 'ORTAKODA';
  
  $('lobby').style.display='none';
  cv.requestPointerLock();
