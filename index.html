@@ -307,8 +307,17 @@ addEventListener('blur',()=>{for(const k in keys)keys[k]=0;down=0});
 // ---- Başlat ----
 $('go').onclick=()=>{
  name=($('nm').value.trim()||'Oyuncu'+Math.floor(Math.random()*99)).replace(/[<>&]/g,'');
- room=($('rm').value.toUpperCase().replace(/[^A-Z0-9]/g,'')||Math.random().toString(36).slice(2,6).toUpperCase());
- $('lobby').style.display='none';cv.requestPointerLock();spawn();started=1;
- if(online)join();else bots(4);
+ 
+ // Boş bırakılırsa herkesin ortak bağlanacağı varsayılan bir oda ("1") oluşturur, 
+ // girildiyse girilen kodu doğrudan oda adı yapar.
+ room = $('rm').value.trim() || '1';
+ 
+ $('lobby').style.display='none';
+ cv.requestPointerLock();
+ spawn();
+ started=1;
+ 
+ if(online) join();
+ else bots(4);
 };
 </script></body></html>
