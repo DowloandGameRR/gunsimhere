@@ -132,11 +132,55 @@ function mergeStatic(){const by={};walls.children.forEach(m=>{m.updateMatrix();(
   const G=new THREE.BufferGeometry();G.setAttribute('position',new THREE.BufferAttribute(P,3));G.setAttribute('normal',new THREE.BufferAttribute(N,3));G.setAttribute('uv',new THREE.BufferAttribute(U,2));G.setIndex(new THREE.BufferAttribute(I,1));
   const M=new THREE.Mesh(G,mt);M.frustumCulled=false;M.matrixAutoUpdate=false;scene.add(M)}
  scene.remove(walls)}
-mergeStatic();
-const R=.4;
-const hit=(x,z,y)=>{for(const b of cols)if(x>b.a-R&&x<b.b+R&&z>b.c-R&&z<b.d+R&&y<b.h-.35)return true;return false};
-const gh=(x,z,y)=>{let g=0;for(const b of cols)if(x>b.a-R&&x<b.b+R&&z>b.c-R&&z<b.d+R&&b.h<=y+.4&&b.h>g)g=b.h;return g};
-const SP=[[-33,-33],[33,33],[-33,33],[33,-33],[0,-35],[0,35],[-35,0],[35,0]];
+function mergeStatic(){
+  const by={};
+  walls.children.forEach(m=>{
+    if(!m.geometry || !m.geometry.attributes.position) return;
+    m.updateMatrix();
+    const uuid = m.material.uuid || (Array.isArray(m.material) ? m.material[0].uuid : 'default');
+    (by[uuid] = by[uuid] || {mt: m.material, l: []}).l.push(m);
+  });
+  
+  for(const k in by){
+    const {mt, l} = by[k];
+    let n = 0, ni = 0;
+    for(const m of l){
+      n += m.geometry.attributes.position.count;
+      if(m.geometry.index) ni += m.geometry.index.count;
+    }
+    
+    const P = new Float32Array(n*3), N = new Float32Array(n*3), U = new Float32Array(n*2), I = ni ? new Uint32Array(ni) : null;
+    let o = 0, oi = 0;
+    
+    for(const m of l){
+      const g = m.geometry.clone().applyMatrix4(m.matrix);
+      const c = g.attributes.position.count;
+      P.set(g.attributes.position.array, o*3);
+      if(g.attributes.normal) N.set(g.attributes.normal.array, o*3);
+      if(g.attributes.uv) U.set(g.attributes.uv.array, o*2);
+      
+      if(g.index && I){
+        const ix = g.index.array;
+        for(let i = 0; i < ix.length; i++) I[oi + i] = ix[i] + o;
+        oi += ix.length;
+      }
+      o += c;
+      g.dispose();
+    }
+    
+    const G = new THREE.BufferGeometry();
+    G.setAttribute('position', new THREE.BufferAttribute(P, 3));
+    if(N) G.setAttribute('normal', new THREE.BufferAttribute(N, 3));
+    if(U) G.setAttribute('uv', new THREE.BufferAttribute(U, 2));
+    if(I) G.setIndex(new THREE.BufferAttribute(I, 1));
+    
+    const M = new THREE.Mesh(G, mt);
+    M.frustumCulled = false;
+    M.matrixAutoUpdate = false;
+    scene.add(M);
+  }
+  scene.remove(walls);
+}
 
 // ---- Toplanabilir eşyalar: yeşil = can, sarı = mermi ----
 function itemMesh(t){const g=new THREE.Group(),a=(w,h,d,x,y,z,c)=>{const m=new THREE.Mesh(BG,pm(c));m.scale.set(w,h,d);m.position.set(x,y,z);g.add(m)};
