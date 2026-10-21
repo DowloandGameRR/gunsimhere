@@ -334,7 +334,7 @@ function update(dt,now){mv=0;for(const q of trs)if(q.m.visible&&now>q.t)q.m.visi
     else{if(!q.t||Math.hypot(q.t[0]-p.x,q.t[1]-p.z)<1.5){const s=SP[Math.random()*8|0];q.t=[s[0]*Math.random(),s[1]*Math.random()]}a=Math.atan2(q.t[0]-p.x,q.t[1]-p.z);p.r=a+Math.PI}
     const nx=p.x+Math.sin(a)*sp*dt,nz=p.z+Math.cos(a)*sp*dt;if(hit(nx,nz,0))q.t=null;else{p.x=nx;p.z=nz}}}
   g.visible=p.a==1;const f=Math.min(1,dt*12),ox=g.position.x,oz=g.position.z;g.position.x+=(p.x-ox)*f;g.position.y+=(p.y-g.position.y)*f;g.position.z+=(p.z-oz)*f;g.rotation.y=p.r;const vs=Math.hypot(g.position.x-ox,g.position.z-oz)/dt,am=Math.min(.9,vs*.12);q.ph=(q.ph||0)+vs*dt*1.6;const sw=Math.sin(q.ph)*am;q.L.rotation.x=sw;q.R.rotation.x=-sw;q.al.rotation.x=-sw*.6;if(q.fl.visible&&now>q.fo)q.fl.visible=false}
- sendT+=dt;if(online&&sendT>.1){sendT=0;const m={x:+pos.x.toFixed(2),y:+pos.y.toFixed(2),z:+pos.z.toFixed(2),r:+yaw.toFixed(2),hp,a:alive?1:0,w:cur,s:sc},j=JSON.stringify(m);if(j!=lastJ||now-lastSend>1500){lastJ=j;lastSend=now;db.ref(`r/${room}/p/${id}`).update(m)}}
+ sendT+=dt;if(online&&sendT>.100){sendT=0;const m={x:+pos.x.toFixed(2),y:+pos.y.toFixed(2),z:+pos.z.toFixed(2),r:+yaw.toFixed(2),hp,a:alive?1:0,w:cur,s:sc},j=JSON.stringify(m);if(j!=lastJ||now-lastSend>1500){lastJ=j;lastSend=now;db.ref(`r/${room}/p/${id}`).update(m)}}
  hudT+=dt;if(hudT>.1){hudT=0;$('hf').style.width=Math.max(0,hp)+'%';setH('st',`${W[cur].n}<br>${reloading?'şarjör...':ammo[cur]+' / '+(ch.ammo?'∞':res[cur])}`);
   const arr=[[name,kills,deaths],...Object.values(pl).map(q=>[q.p.n,q.p.k||0,q.p.d||0])].sort((a,b)=>b[1]-a[1]).slice(0,6);
   setH('sc','Oda: '+room+'<br>'+arr.map(a=>`${a[0]} ${a[1]}/${a[2]}`).join('<br>'));
