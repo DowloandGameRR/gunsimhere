@@ -410,7 +410,6 @@ $('rm').oninput=e=>{e.target.value=e.target.value.replace(/\D/g,'')};
 ap();applyQ();if(S.fps)tg('fps',1);
 
 // ---- Başlat ----
-// ---- Başlat ----
 $('go').onclick = () => {
   name = ($('nm').value.trim() || 'Oyuncu' + Math.floor(Math.random() * 99)).replace(/[<>&]/g, '');
   room = ($('rm').value.replace(/\D/g, '').slice(0, 6) || String(1000 + Math.random() * 9000 | 0));
@@ -424,16 +423,17 @@ $('go').onclick = () => {
   if (online) join();
   else bots(4);
 
-  // Tarayıcı engelini aşmak için canvas üzerine tıklandığında kilitleme yapmasını garantileyen dinleyici ekle
-  cv.onclick = () => {
-    if (started && $('con').style.display != 'flex' && stg.style.display != 'flex') {
-      cv.requestPointerLock();
-    }
-  };
-
-  // İlk tetikleme denemesi
+  // Farenin ekrana kilitlenmesi için canvas'a odaklan ve kilit isteği gönder
   setTimeout(() => {
+    cv.focus();
     cv.requestPointerLock();
-  }, 50);
+  }, 100);
 };
+
+// Ekstra güvenlik: Eğer ilk kilitlenme başarısız olursa, oyun ekranının herhangi bir yerine tıklandığında kilitlensin
+cv.addEventListener('click', () => {
+  if (started && $('con').style.display != 'flex' && stg.style.display != 'flex') {
+    cv.requestPointerLock();
+  }
+});
 </script></body></html>
