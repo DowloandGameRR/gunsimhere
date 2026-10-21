@@ -50,15 +50,8 @@ button{background:#e44;color:#fff;cursor:pointer}
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script>
 // ===== FIREBASE AYARI: Firebase konsolundan Web App config'ini buraya yapıştır =====
-const FB={// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
+// ===== FIREBASE AYARI: Firebase konsolundan Web App config'ini buraya yapıştır =====
+const FB = {
   apiKey: "AIzaSyC01qT9lUS_X0v_A-P-99BGq5oB7JuvFnk",
   authDomain: "gunsimhere.firebaseapp.com",
   databaseURL: "https://gunsimhere-default-rtdb.firebaseio.com",
@@ -68,6 +61,8 @@ const firebaseConfig = {
   appId: "1:954407061375:web:285c0a600dcd737bb3fc4a",
   measurementId: "G-2CL9STXNNL"
 };
+// ===================================================================================
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
